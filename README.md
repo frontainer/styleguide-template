@@ -15,6 +15,7 @@ index.htmlにガイドの元となるCSSを読み込む
 
 	<block>
 		<heading>見出し</heading>
+		<comment>このスタイルの説明文</comment>
 		<markup>
 			<!-- サンプルコード -->
 			<a class="button button-success">送信</a>
@@ -29,7 +30,6 @@ index.htmlにガイドの元となるCSSを読み込む
 
 * サンプルコード表示の整形
 * できればシンタックスハイライトさせたい
-* 備考や説明文の追加
 
 ## 更新履歴
-0.0.1 - Release
+0.0.1 - Release. commentディレクティブ追加
