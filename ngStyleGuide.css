@@ -2,12 +2,18 @@
     display: none !important;
 }
 
-styleguide, block, heading, markup, preview, sample, navigation, anchor {
+styleguide, block, heading,comment, markup, preview, sample, navigation, anchor {
     display: block;
 }
 
 heading {
-    margin: 30px 0 10px;
+    margin: 25px 0 15px;
+    font-size: 32px;
+}
+
+comment {
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 markup {

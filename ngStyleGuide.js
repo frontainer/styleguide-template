@@ -1,14 +1,9 @@
 (function() {
     'use strict';
-    var STYLE = {
-        block: {
-            marginBottom: '40px'
-        },
-        heading: {
-            fontSize: '32px'
-        }
-    };
     angular.module('ngStyleGuide',[])
+        /**
+         * スタイルガイドディレクティブ
+         */
         .directive('styleguide', function() {
             return {
                 restrict: 'E',
@@ -24,6 +19,9 @@
                 }
             }
         })
+        /**
+         * スタイルをブロック分けするディレクティブ
+         */
         .directive('block',function() {
             return {
                 require: '^styleguide',
@@ -40,11 +38,13 @@
                     };
                 },
                 link: function($scope,$element,$attr,guideCtrl) {
-                    $element.css(STYLE.block);
                     guideCtrl.addBlock($scope);
                 }
             };
         })
+        /**
+         * ブロックの見出し
+         */
         .directive('heading',function() {
             return {
                 require: '^block',
@@ -52,11 +52,23 @@
                 link: function($scope,$element,$attr,blockCtrl) {
                     $scope.html = $element.text();
                     $element.attr('id',$scope.$id);
-                    $element.css(STYLE.heading);
                     blockCtrl.addHeading($scope);
                 }
             };
         })
+        /**
+         * ブロックの説明文
+         */
+        .directive('comment', function() {
+            return {
+                require: '^block',
+                restrict: 'E',
+                scope: true
+            }
+        })
+        /**
+         * スタイルコード
+         */
         .directive('markup',function($compile) {
             return {
                 require: '^block',
@@ -71,6 +83,9 @@
                 }
             };
         })
+        /**
+         * 整形フィルタ
+         */
         .filter('pretty',function() {
             return function(input) {
                 if(!input) return '';
@@ -91,6 +106,9 @@
                 return input.replace(/^\n/m,"").replace(/^\s/mg,"").replace(/^\s+$/gm,'').replace(reg, "");
             }
         })
+        /**
+         * アンカーリンク
+         */
         .directive('anchor', function($anchorScroll,$location) {
             return {
                 restrict: 'E',
@@ -108,6 +126,9 @@
                 }
             }
         })
+        /**
+         * ナビゲーション
+         */
         .directive('navigation', function() {
             return {
                 restrict: 'E',
