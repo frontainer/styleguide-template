@@ -3,6 +3,9 @@ styleguide-template(β)
 
 AngularJSを使ったスタイルガイドテンプレート
 
+## デモ
+[http://frontainer.com/styleguide-template/](http://frontainer.com/styleguide-template/)
+
 ## 使い方
 index.htmlにガイドの元となるCSSを読み込む
 
