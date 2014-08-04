@@ -1,5 +1,6 @@
 (function() {
     'use strict';
+    var $dummy = $('<div></div>');
     angular.module('ngStyleGuide',[])
         /**
          * スタイルガイドディレクティブ
@@ -77,9 +78,12 @@
                 link: function($scope,$element,$attr,blockCtrl) {
                     $scope.html = $element.html();
                     $element.html('<preview>'+$scope.html+'</preview>');
-                    var inter = $compile('<sample>{{html | pretty}}</sample>')($scope);
-                    $element.append(inter);
+                    var inter = $compile('<sample class="prettyprint">{{html | pretty}}</sample>')($scope);
                     blockCtrl.addMarkup($scope);
+                    $element.append(inter);
+                    window.setTimeout(function() {
+                        inter.html(prettyPrintOne(inter.html()));
+                    });
                 }
             };
         })
@@ -89,21 +93,7 @@
         .filter('pretty',function() {
             return function(input) {
                 if(!input) return '';
-                var tabsp = input.split('\n');
-                var max = NaN;
-                for (var i = 0,len=tabsp.length;i<len;i++){
-                    var m = tabsp[i].match(/ {2}/g,'');
-                    if(m) {
-                        if (m.length < max || isNaN(max)) {
-                            max = m.length;
-                        }
-                    }
-                }
-                var reg = new RegExp('  {'+max+'}','g');
-                if (isNaN(max)) {
-                    return input;
-                }
-                return input.replace(/^\n/m,"").replace(/^\s/mg,"").replace(/^\s+$/gm,'').replace(reg, "");
+                return $.htmlClean(input,{format:true});
             }
         })
         /**
