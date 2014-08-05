@@ -97,7 +97,6 @@
                 var m = input.match(/^\s+/gm,'');
                 var min = NaN;
                 for (var i = 0 , len = m.length; i< len; i++) {
-                    console.log(m[i].length);
                     if(m[i].length < min || isNaN(min)) {
                         min = m[i].length;
                     }
