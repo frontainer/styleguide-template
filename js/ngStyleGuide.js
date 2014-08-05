@@ -2,9 +2,9 @@
     'use strict';
     var $dummy = $('<div></div>');
     angular.module('ngStyleGuide',[])
-        /**
-         * スタイルガイドディレクティブ
-         */
+    /**
+     * スタイルガイドディレクティブ
+     */
         .directive('styleguide', function() {
             return {
                 restrict: 'E',
@@ -20,9 +20,9 @@
                 }
             }
         })
-        /**
-         * スタイルをブロック分けするディレクティブ
-         */
+    /**
+     * スタイルをブロック分けするディレクティブ
+     */
         .directive('block',function() {
             return {
                 require: '^styleguide',
@@ -43,9 +43,9 @@
                 }
             };
         })
-        /**
-         * ブロックの見出し
-         */
+    /**
+     * ブロックの見出し
+     */
         .directive('heading',function() {
             return {
                 require: '^block',
@@ -57,9 +57,9 @@
                 }
             };
         })
-        /**
-         * ブロックの説明文
-         */
+    /**
+     * ブロックの説明文
+     */
         .directive('comment', function() {
             return {
                 require: '^block',
@@ -67,9 +67,9 @@
                 scope: true
             }
         })
-        /**
-         * スタイルコード
-         */
+    /**
+     * スタイルコード
+     */
         .directive('markup',function($compile) {
             return {
                 require: '^block',
@@ -87,18 +87,32 @@
                 }
             };
         })
-        /**
-         * 整形フィルタ
-         */
+    /**
+     * 整形フィルタ
+     */
         .filter('pretty',function() {
             return function(input) {
                 if(!input) return '';
-                return $.htmlClean(input,{format:true});
+                input = input.replace(/^\n+/gm,'').replace(/^\s+$/gm,'').replace(/\n+$/gm,'').replace(/\t/gm,'    ');
+                var m = input.match(/^\s+/gm,'');
+                var min = NaN;
+                for (var i = 0 , len = m.length; i< len; i++) {
+                    console.log(m[i].length);
+                    if(m[i].length < min || isNaN(min)) {
+                        min = m[i].length;
+                    }
+                }
+                if(isNaN(min)) {
+                    return input;
+                }
+                var reg = new RegExp('^\\s{'+min+'}','gm');
+                input = input.replace(reg,'');
+                return input;
             }
         })
-        /**
-         * アンカーリンク
-         */
+    /**
+     * アンカーリンク
+     */
         .directive('anchor', function($anchorScroll,$location) {
             return {
                 restrict: 'E',
@@ -116,9 +130,9 @@
                 }
             }
         })
-        /**
-         * ナビゲーション
-         */
+    /**
+     * ナビゲーション
+     */
         .directive('navigation', function() {
             return {
                 restrict: 'E',
