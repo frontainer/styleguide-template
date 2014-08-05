@@ -1,14 +1,10 @@
 (function() {
     'use strict';
-    var STYLE = {
-        block: {
-            marginBottom: '40px'
-        },
-        heading: {
-            fontSize: '32px'
-        }
-    };
+    var $dummy = $('<div></div>');
     angular.module('ngStyleGuide',[])
+    /**
+     * スタイルガイドディレクティブ
+     */
         .directive('styleguide', function() {
             return {
                 restrict: 'E',
@@ -24,6 +20,9 @@
                 }
             }
         })
+    /**
+     * スタイルをブロック分けするディレクティブ
+     */
         .directive('block',function() {
             return {
                 require: '^styleguide',
@@ -40,11 +39,13 @@
                     };
                 },
                 link: function($scope,$element,$attr,guideCtrl) {
-                    $element.css(STYLE.block);
                     guideCtrl.addBlock($scope);
                 }
             };
         })
+    /**
+     * ブロックの見出し
+     */
         .directive('heading',function() {
             return {
                 require: '^block',
@@ -52,11 +53,23 @@
                 link: function($scope,$element,$attr,blockCtrl) {
                     $scope.html = $element.text();
                     $element.attr('id',$scope.$id);
-                    $element.css(STYLE.heading);
                     blockCtrl.addHeading($scope);
                 }
             };
         })
+    /**
+     * ブロックの説明文
+     */
+        .directive('comment', function() {
+            return {
+                require: '^block',
+                restrict: 'E',
+                scope: true
+            }
+        })
+    /**
+     * スタイルコード
+     */
         .directive('markup',function($compile) {
             return {
                 require: '^block',
@@ -65,32 +78,41 @@
                 link: function($scope,$element,$attr,blockCtrl) {
                     $scope.html = $element.html();
                     $element.html('<preview>'+$scope.html+'</preview>');
-                    var inter = $compile('<sample>{{html | pretty}}</sample>')($scope);
-                    $element.append(inter);
+                    var inter = $compile('<sample class="prettyprint">{{html | pretty}}</sample>')($scope);
                     blockCtrl.addMarkup($scope);
+                    $element.append(inter);
+                    window.setTimeout(function() {
+                        inter.html(prettyPrintOne(inter.html()));
+                    });
                 }
             };
         })
+    /**
+     * 整形フィルタ
+     */
         .filter('pretty',function() {
             return function(input) {
                 if(!input) return '';
-                var tabsp = input.split('\n');
-                var max = NaN;
-                for (var i = 0,len=tabsp.length;i<len;i++){
-                    var m = tabsp[i].match(/ {2}/g,'');
-                    if(m) {
-                        if (m.length < max || isNaN(max)) {
-                            max = m.length;
-                        }
+                input = input.replace(/^\n+/gm,'').replace(/^\s+$/gm,'').replace(/\n+$/gm,'').replace(/\t/gm,'    ');
+                var m = input.match(/^\s+/gm,'');
+                var min = NaN;
+                for (var i = 0 , len = m.length; i< len; i++) {
+                    console.log(m[i].length);
+                    if(m[i].length < min || isNaN(min)) {
+                        min = m[i].length;
                     }
                 }
-                var reg = new RegExp('  {'+max+'}','g');
-                if (isNaN(max)) {
+                if(isNaN(min)) {
                     return input;
                 }
-                return input.replace(/^\n/m,"").replace(/^\s/mg,"").replace(/^\s+$/gm,'').replace(reg, "");
+                var reg = new RegExp('^\\s{'+min+'}','gm');
+                input = input.replace(reg,'');
+                return input;
             }
         })
+    /**
+     * アンカーリンク
+     */
         .directive('anchor', function($anchorScroll,$location) {
             return {
                 restrict: 'E',
@@ -108,6 +130,9 @@
                 }
             }
         })
+    /**
+     * ナビゲーション
+     */
         .directive('navigation', function() {
             return {
                 restrict: 'E',

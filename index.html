@@ -13,6 +13,7 @@
         <!-- Navigation -->
         <block>
             <heading>Typegraphy</heading>
+            <comment>見出しのスタイル</comment>
             <markup>
                 <h1>h1. Bootstrap heading</h1>
                 <h2>h2. Bootstrap heading</h2>
@@ -118,8 +119,11 @@
     <navigation ng-cloak>
         <anchor ng-repeat="block in blocks" headings="block.headings"></anchor>
     </navigation>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
-<script src="ngStyleGuide.js"></script>
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/jquery.htmlClean.min.js"></script>
+<script src="js/prettify.js"></script>
+<script src="js/ngStyleGuide.js"></script>
 <script>
     angular.module('app', ['ngStyleGuide']);
 </script>
